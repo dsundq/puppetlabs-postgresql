@@ -83,4 +83,40 @@ describe 'postgresql::globals' do
       end
     end
   end
+
+  # Guards the RedHat-family $default_version selector in globals.pp. Each
+  # EL major must auto-resolve to the expected PostgreSQL version; without a
+  # matching entry globals.pp raises
+  # fail('No preferred version defined or automatically detected.') and the
+  # catalog does not compile. $globals_version is a local var, not a class
+  # param, so it is asserted indirectly via the version-derived PGDG GPG key
+  # file that the repo setup lays down (package_version strips the dot:
+  # '10' => '10', '13' => '13', '16' => '16').
+  {
+    'RedHat 8' => '10',
+    'RedHat 9' => '13',
+    'RedHat 10' => '16'
+  }.each do |ctx, pg_version|
+    context "on #{ctx.downcase}" do
+      include_examples ctx
+
+      describe 'with no parameters' do
+        it 'compiles, proving a default version resolves' do
+          expect(subject).to contain_class('postgresql::globals')
+        end
+      end
+
+      describe 'manage_package_repo => true' do
+        let(:params) do
+          {
+            manage_package_repo: true
+          }
+        end
+
+        it "resolves the default to PostgreSQL #{pg_version}" do
+          expect(subject).to contain_file("/etc/pki/rpm-gpg/RPM-GPG-KEY-PGDG-#{pg_version}")
+        end
+      end
+    end
+  end
 end

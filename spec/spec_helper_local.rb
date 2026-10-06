@@ -196,6 +196,10 @@ shared_context 'RedHat 8' do
   let(:facts) { on_supported_os['redhat-8-x86_64'] }
 end
 
+shared_context 'RedHat 9' do
+  let(:facts) { on_supported_os['redhat-9-x86_64'] }
+end
+
 shared_context 'Fedora 33' do
   let(:facts) do
     {
@@ -260,6 +264,35 @@ shared_context 'Gentoo' do
       path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
       selinux: false,
       service_provider: 'openrc'
+    }
+  end
+end
+
+# facterdb bundled with the PDK has no EL10 fact set yet, so stub the
+# RedHat 10 facts manually (modelled on the Fedora/Amazon contexts above).
+shared_context 'RedHat 10' do
+  let :facts do
+    {
+      os: {
+        'architecture' => 'x86_64',
+        'family' => 'RedHat',
+        'hardware' => 'x86_64',
+        'name' => 'RedHat',
+        'release' => {
+          'full' => '10.0',
+          'major' => '10',
+          'minor' => '0'
+        },
+        'selinux' => { 'enabled' => true }
+      },
+      kernel: 'Linux',
+      id: 'root',
+      path: '/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin',
+      selinux: true,
+      operatingsystem: 'RedHat',
+      operatingsystemrelease: '10.0',
+      operatingsystemmajrelease: '10',
+      service_provider: 'systemd'
     }
   end
 end
