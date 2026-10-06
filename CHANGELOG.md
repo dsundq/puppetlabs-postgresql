@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/) and this project adheres to [Semantic Versioning](http://semver.org).
 
+## Unreleased
+
+### Added
+
+- Add Enterprise Linux 10 support: resolve the default PostgreSQL version to 16 on RHEL/Rocky/AlmaLinux 10 and declare EL10 in `operatingsystem_support`, with spec coverage for the EL8/EL9/EL10 version resolution.
+
 ## [v9.2.0](https://github.com/puppetlabs/puppetlabs-postgresql/tree/v9.2.0) - 2023-08-30
 
 [Full Changelog](https://github.com/puppetlabs/puppetlabs-postgresql/compare/v9.1.0...v9.2.0)
